@@ -37,5 +37,11 @@ namespace central_fish_agency_dotnet.Boats.Controllers
         {
             return Ok(await _boatsService.UpdateBoat(updateBoat));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetBoatsResponseDto>>> DeleteBoats(int id)
+        {
+            return Ok(await _boatsService.DeleteBoats(id));
+        }
     }
 }
