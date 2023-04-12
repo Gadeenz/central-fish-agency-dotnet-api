@@ -31,5 +31,11 @@ namespace central_fish_agency_dotnet.Boats.Controllers
         {
             return Ok(await _boatsService.AddBoat(newBoat));
         }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetBoatsResponseDto>>> UpdateBoat(UpdateBoatDto updateBoat)
+        {
+            return Ok(await _boatsService.UpdateBoat(updateBoat));
+        }
     }
 }
