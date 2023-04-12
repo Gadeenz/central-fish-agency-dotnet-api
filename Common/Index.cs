@@ -5,3 +5,5 @@ global using central_fish_agency_dotnet.Boats;
 global using central_fish_agency_dotnet.Boats.Dtos;
 global using WebApi.Middleware;
 global using AutoMapper;
+global using Microsoft.EntityFrameworkCore;
+global using central_fish_agency_dotnet.Db;
