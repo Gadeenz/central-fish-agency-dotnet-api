@@ -9,5 +9,6 @@ namespace central_fish_agency_dotnet.Boats.interfaces
         Task<ServiceResponse<GetBoatsResponseDto>> GetBoatById(int id);
 
         Task<ServiceResponse<List<GetBoatsResponseDto>>> AddBoat(AddBoatRequestDto newBoat);
+        Task<ServiceResponse<GetBoatsResponseDto>> UpdateBoat(UpdateBoatDto updateBoat);
     }
 }

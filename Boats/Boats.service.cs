@@ -17,7 +17,9 @@ namespace central_fish_agency_dotnet.Boats
         public async Task<ServiceResponse<List<GetBoatsResponseDto>>> AddBoat(AddBoatRequestDto newBoat)
         {
             var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
-            boats.Add(_mapper.Map<BoatsModel>((newBoat)));
+            var boat = _mapper.Map<BoatsModel>((newBoat));
+            boat.Id = boats.Max(c => c.Id) + 1;
+            boats.Add(boat);
             servicesResponse.Data = boats.Select(c => _mapper.Map<GetBoatsResponseDto>(c)).ToList();
             return servicesResponse;
         }
@@ -35,8 +37,25 @@ namespace central_fish_agency_dotnet.Boats
             var boat = boats.FirstOrDefault(c => c.Id == id);
             if (boat is null)
             {
-                throw new Exception("boat not found");
+                throw new Exception($"boat with Id '{id}' not found");
             }
+            servicesResponse.Data = _mapper.Map<GetBoatsResponseDto>((boat));
+            return servicesResponse;
+        }
+
+        public async Task<ServiceResponse<GetBoatsResponseDto>> UpdateBoat(UpdateBoatDto updateBoat)
+        {
+            var servicesResponse = new ServiceResponse<GetBoatsResponseDto>();
+            var boat = boats.FirstOrDefault(c => c.Id == updateBoat.Id);
+
+            if (boat is null)
+            {
+                throw new Exception($"boat with Id '{updateBoat.Id}' not found.");
+            }
+
+            boat.BoatName = updateBoat.BoatName;
+            boat.BoatNumber = updateBoat.BoatNumber;
+
             servicesResponse.Data = _mapper.Map<GetBoatsResponseDto>((boat));
             return servicesResponse;
         }
