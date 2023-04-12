@@ -24,6 +24,22 @@ namespace central_fish_agency_dotnet.Boats
             return servicesResponse;
         }
 
+        public async Task<ServiceResponse<List<GetBoatsResponseDto>>> DeleteBoats(int id)
+        {
+            var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
+            var boat = boats.FirstOrDefault(c => c.Id == id);
+
+            if (boat is null)
+            {
+                throw new Exception($"boat with Id '{id}' not found.");
+            }
+
+            boats.Remove(boat);
+            servicesResponse.Data = boats.Select(c => _mapper.Map<GetBoatsResponseDto>(c)).ToList();
+
+            return servicesResponse;
+        }
+
         public async Task<ServiceResponse<List<GetBoatsResponseDto>>> GetAllBoats()
         {
             var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
