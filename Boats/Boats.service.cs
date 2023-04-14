@@ -20,9 +20,9 @@ namespace central_fish_agency_dotnet.Boats
         {
             var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
             var boat = _mapper.Map<BoatsModel>((newBoat));
-            boat.Id = boats.Max(c => c.Id) + 1;
-            boats.Add(boat);
-            servicesResponse.Data = boats.Select(c => _mapper.Map<GetBoatsResponseDto>(c)).ToList();
+            _context.Boats.Add(boat);
+            await _context.SaveChangesAsync();
+            servicesResponse.Message = $"boat with name '{newBoat.BoatName}' number '{newBoat.BoatNumber}' created successfully";
             return servicesResponse;
         }
 
@@ -33,7 +33,7 @@ namespace central_fish_agency_dotnet.Boats
 
             if (boat is null)
             {
-                throw new Exception($"boat with Id '{id}' not found.");
+                throw new KeyNotFoundException($"boat with Id '{id}' not found.");
             }
 
             boats.Remove(boat);
@@ -57,7 +57,7 @@ namespace central_fish_agency_dotnet.Boats
             servicesResponse.Data = _mapper.Map<GetBoatsResponseDto>(dbBoats);
             if (servicesResponse.Data is null)
             {
-                throw new Exception($"boat with Id '{id}' not found");
+                throw new KeyNotFoundException($"boat with Id '{id}' not found");
             }
             return servicesResponse;
         }
