@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using central_fish_agency_dotnet.Common.interfaces;
 
-namespace central_fish_agency_dotnet.Common.Middleware
+
+namespace central_fish_agency_dotnet.Authentication
 {
     public class AuthenticationService : IAuthentication
     {
@@ -32,10 +32,10 @@ namespace central_fish_agency_dotnet.Common.Middleware
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             var response = new ServiceResponse<int>();
-            if (await UserExists(user.UserEmail))
+            if (await UserExists(user.Email))
             {
                 response.Success = false;
-                response.Message = $"User with email '{user.UserEmail}' already exists.";
+                response.Message = $"User with email '{user.Email}' already exists.";
                 return response;
             }
 
@@ -48,12 +48,13 @@ namespace central_fish_agency_dotnet.Common.Middleware
             await _context.SaveChangesAsync();
 
             response.Data = user.Id;
+            response.Message = $"user with user name : '{user.Username}' email : '{user.Email}' created successfully.";
             return response;
         }
 
-        public async Task<bool> UserExists(string userEmail)
+        public async Task<bool> UserExists(string email)
         {
-            if (await _context.Users.AnyAsync(u => u.UserEmail.ToLower() == userEmail.ToLower()))
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
             {
                 return true;
             }

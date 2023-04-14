@@ -1,3 +1,5 @@
+using central_fish_agency_dotnet.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IBoats, BoatsService>();
+builder.Services.AddScoped<IAuthentication, AuthenticationService>();
 
 var app = builder.Build();
 

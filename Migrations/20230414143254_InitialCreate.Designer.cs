@@ -11,7 +11,7 @@ using central_fish_agency_dotnet.Db;
 namespace central_fish_agency_dotnet.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230414140412_InitialCreate")]
+    [Migration("20230414143254_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -53,6 +53,10 @@ namespace central_fish_agency_dotnet.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -60,10 +64,6 @@ namespace central_fish_agency_dotnet.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
