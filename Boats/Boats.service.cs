@@ -4,10 +4,6 @@ namespace central_fish_agency_dotnet.Boats
 {
     public class BoatsService : IBoats
     {
-        private static List<BoatsModel> boats = new List<BoatsModel>{
-            new BoatsModel(),
-            new BoatsModel {Id =1,BoatName = "Boat number 2" }
-        };
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
@@ -30,15 +26,16 @@ namespace central_fish_agency_dotnet.Boats
         public async Task<ServiceResponse<List<GetBoatsResponseDto>>> DeleteBoats(int id)
         {
             var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
-            var boat = boats.FirstOrDefault(c => c.Id == id);
+            var boat = await _context.Boats.FirstOrDefaultAsync(c => c.Id == id);
 
             if (boat is null)
             {
                 throw new KeyNotFoundException($"boat with Id '{id}' not found.");
             }
 
-            boats.Remove(boat);
-            servicesResponse.Data = boats.Select(c => _mapper.Map<GetBoatsResponseDto>(c)).ToList();
+            _context.Boats.Remove(boat);
+            await _context.SaveChangesAsync();
+            servicesResponse.Message = $"boat with Id '{id}' deleted successfully.";
 
             return servicesResponse;
         }
