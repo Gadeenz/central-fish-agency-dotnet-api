@@ -6,7 +6,7 @@ using central_fish_agency_dotnet.Common.interfaces;
 
 namespace central_fish_agency_dotnet.Common.Middleware
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthenticationService : IAuthentication
     {
         public Task<ServiceResponse<string>> Login(string username, string password)
         {
