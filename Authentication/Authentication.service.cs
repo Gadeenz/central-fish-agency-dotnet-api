@@ -31,6 +31,14 @@ namespace central_fish_agency_dotnet.Common.Middleware
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
+            var response = new ServiceResponse<int>();
+            if (await UserExists(user.UserEmail))
+            {
+                response.Success = false;
+                response.Message = $"User with email '{user.UserEmail}' already exists.";
+                return response;
+            }
+
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
@@ -38,14 +46,18 @@ namespace central_fish_agency_dotnet.Common.Middleware
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            var response = new ServiceResponse<int>();
+
             response.Data = user.Id;
             return response;
         }
 
-        public Task<bool> UserExists(string username)
+        public async Task<bool> UserExists(string userEmail)
         {
-            throw new NotImplementedException();
+            if (await _context.Users.AnyAsync(u => u.UserEmail.ToLower() == userEmail.ToLower()))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
