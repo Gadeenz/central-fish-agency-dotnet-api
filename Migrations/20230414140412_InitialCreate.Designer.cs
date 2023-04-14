@@ -11,7 +11,7 @@ using central_fish_agency_dotnet.Db;
 namespace central_fish_agency_dotnet.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230414130531_InitialCreate")]
+    [Migration("20230414140412_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -60,6 +60,10 @@ namespace central_fish_agency_dotnet.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
