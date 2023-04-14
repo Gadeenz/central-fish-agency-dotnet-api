@@ -8,3 +8,4 @@ global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using central_fish_agency_dotnet.Db;
 global using central_fish_agency_dotnet.Users.Model;
+global using central_fish_agency_dotnet.Authentication.interfaces;
