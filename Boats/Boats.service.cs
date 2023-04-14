@@ -9,9 +9,11 @@ namespace central_fish_agency_dotnet.Boats
             new BoatsModel {Id =1,BoatName = "Boat number 2" }
         };
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public BoatsService(IMapper mapper)
+        public BoatsService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
         public async Task<ServiceResponse<List<GetBoatsResponseDto>>> AddBoat(AddBoatRequestDto newBoat)
@@ -43,19 +45,20 @@ namespace central_fish_agency_dotnet.Boats
         public async Task<ServiceResponse<List<GetBoatsResponseDto>>> GetAllBoats()
         {
             var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
-            servicesResponse.Data = boats.Select(c => _mapper.Map<GetBoatsResponseDto>(c)).ToList();
+            var dbBoats = await _context.Boats.ToListAsync();
+            servicesResponse.Data = dbBoats.Select(c => _mapper.Map<GetBoatsResponseDto>(c)).ToList();
             return servicesResponse;
         }
 
         public async Task<ServiceResponse<GetBoatsResponseDto>> GetBoatById(int id)
         {
             var servicesResponse = new ServiceResponse<GetBoatsResponseDto>();
-            var boat = boats.FirstOrDefault(c => c.Id == id);
-            if (boat is null)
+            var dbBoats = await _context.Boats.FirstOrDefaultAsync(c => c.Id == id);
+            servicesResponse.Data = _mapper.Map<GetBoatsResponseDto>(dbBoats);
+            if (servicesResponse.Data is null)
             {
                 throw new Exception($"boat with Id '{id}' not found");
             }
-            servicesResponse.Data = _mapper.Map<GetBoatsResponseDto>((boat));
             return servicesResponse;
         }
 

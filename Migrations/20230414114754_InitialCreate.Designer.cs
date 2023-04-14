@@ -11,7 +11,7 @@ using central_fish_agency_dotnet.Db;
 namespace central_fish_agency_dotnet.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230412224345_InitialCreate")]
+    [Migration("20230414114754_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
