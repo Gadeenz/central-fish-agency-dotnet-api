@@ -16,13 +16,14 @@ namespace central_fish_agency_dotnet.Boats
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<ServiceResponse<List<GetBoatsResponseDto>>> AddBoat(AddBoatRequestDto newBoat)
         {
             var servicesResponse = new ServiceResponse<List<GetBoatsResponseDto>>();
             var boat = _mapper.Map<BoatsModel>((newBoat));
             _context.Boats.Add(boat);
             await _context.SaveChangesAsync();
-            servicesResponse.Message = $"boat with name '{newBoat.BoatName}' number '{newBoat.BoatNumber}' created successfully";
+            servicesResponse.Message = $"boat with name '{newBoat.BoatName}' number '{newBoat.BoatNumber}' created successfully.";
             return servicesResponse;
         }
 
@@ -65,17 +66,19 @@ namespace central_fish_agency_dotnet.Boats
         public async Task<ServiceResponse<GetBoatsResponseDto>> UpdateBoat(UpdateBoatDto updateBoat)
         {
             var servicesResponse = new ServiceResponse<GetBoatsResponseDto>();
-            var boat = boats.FirstOrDefault(c => c.Id == updateBoat.Id);
+            var boat = await _context.Boats.FirstOrDefaultAsync(c => c.Id == updateBoat.Id);
 
             if (boat is null)
             {
-                throw new Exception($"boat with Id '{updateBoat.Id}' not found.");
+                throw new KeyNotFoundException($"boat with Id '{updateBoat.Id}' not found.");
             }
 
             boat.BoatName = updateBoat.BoatName;
             boat.BoatNumber = updateBoat.BoatNumber;
 
-            servicesResponse.Data = _mapper.Map<GetBoatsResponseDto>((boat));
+            await _context.SaveChangesAsync();
+
+            servicesResponse.Message = $"boat with Id '{updateBoat.Id}' updated successfully.";
             return servicesResponse;
         }
     }
