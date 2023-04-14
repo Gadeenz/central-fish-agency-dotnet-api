@@ -11,7 +11,7 @@ using central_fish_agency_dotnet.Db;
 namespace central_fish_agency_dotnet.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230414114754_InitialCreate")]
+    [Migration("20230414130531_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,6 +43,31 @@ namespace central_fish_agency_dotnet.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Boats");
+                });
+
+            modelBuilder.Entity("central_fish_agency_dotnet.Users.Model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
